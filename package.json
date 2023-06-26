@@ -1,5 +1,25 @@
 {
   "dependencies": {
     "mongodb": "^5.6.0"
-  }
+  },
+  "devDependencies": {
+    "jest": "^29.5.0"
+  },
+  "scripts": {
+    "test": "jest",
+    "start": "node cputemp-checker.js"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "testTimeout": 5000
+  },
+  "name": "cputemp-checker",
+  "description": "Checks the CPU Temperature and populates the database",
+  "version": "1.0.0",
+  "main": "cputemp-checker.js",
+  "author": "Alex Mc",
+  "license": "ISC"
 }
