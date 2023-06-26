@@ -39,12 +39,12 @@ variable "mongo_url"  {
 #}
 
 #      "image": "${aws_ecr_repository.my_first_ecr_repo.repository_url}",
-resource "aws_ecs_task_definition" "cpuchecker_task" {
-  family                   = "cpuchecker-task" # Naming our first task
+resource "aws_ecs_task_definition" "cputempchecker_task" {
+  family                   = "cputempchecker-task" # Naming our first task
   container_definitions    = <<DEFINITION
   [
     {
-      "name": "cpu-checker-task",
+      "name": "cputemp-checker-task",
       "image": "mcguinnessa/demo-cputemp-checker",
       "essential": true,
       "memory": 512,
@@ -109,11 +109,11 @@ resource "aws_ecs_task_definition" "cpuchecker_task" {
 #  description = "Namespace for MD Service Discovery"
 #}
 
-resource "aws_ecs_service" "cpuchecker_service" {
-  name            = "cpuchecker-service"                             # Naming our first service
+resource "aws_ecs_service" "cputempchecker_service" {
+  name            = "cputempchecker-service"                             # Naming our first service
 #  cluster         = "${aws_ecs_cluster.mongo_wrapper_cluster.id}"             # Referencing our created Cluster
   cluster         = "monitor-cluster"             # Referencing our created Cluster
-  task_definition = "${aws_ecs_task_definition.cpuchecker_task.arn}" # Referencing the task our service will spin up
+  task_definition = "${aws_ecs_task_definition.cputempchecker_task.arn}" # Referencing the task our service will spin up
   launch_type     = "FARGATE"
   desired_count   = 1 # Setting the number of containers we want deployed to 3
 
@@ -147,11 +147,11 @@ resource "aws_ecs_service" "cpuchecker_service" {
   network_configuration {
     subnets          = ["${aws_default_subnet.default_subnet_a.id}", "${aws_default_subnet.default_subnet_b.id}", "${aws_default_subnet.default_subnet_c.id}"]
     assign_public_ip = true                                                # Providing our containers with public IPs
-    security_groups  = ["${aws_security_group.cpuchecker_service_security_group.id}"] # Setting the security group
+    security_groups  = ["${aws_security_group.cputempchecker_service_security_group.id}"] # Setting the security group
   }
 }
 
-resource "aws_security_group" "cpuchecker_service_security_group" {
+resource "aws_security_group" "cputempchecker_service_security_group" {
   ingress {
     from_port = 0
     to_port   = 0
