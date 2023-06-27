@@ -4,7 +4,7 @@ const {MongoClient} = require('mongodb');
 const DAY_S = 24 * 60 * 60;
 const DAY_MS = DAY_S * 1000;
 const HOUR_MS = 60 * 60 * 1000;
-const INTERVAL_S = 10 * 60;
+const INTERVAL_S = 30 * 60;
 const INTERVAL_MS = INTERVAL_S * 1000;
 
 const max_temp = 73;
@@ -42,35 +42,15 @@ async function run(){
     const database = client.db(db_tools.DB_NAME);
     const metric_record = database.collection(db_tools.COLLECTION_NAME);
     var now = new Date();
-    //var now_ms = now.getTime();
 
-    //Remove all records 
-//    metric_record.updateMany(
-//      { },
-//      { $unset: { cpuUsage: "" } }
-//    )
-    //const d_res = await metric_record.deleteMany({timestamp : {$gt : now_ms} })
-    //const d_res = await metric_record.deleteMany({timestamp : {$gt : now} })
-    //const d_res1 = await metric_record.deleteMany({"date": {$type: "string"}})
-    //const d_res1 = await metric_record.deleteMany({})
-    //console.log("Delete:" + d_res1.result.n);
-//    const d_res2 = await metric_record.deleteMany({"$and": [{timestamp: {"$lt": now }}, { "cpuUsage": {$exists : true } }] })
-//    console.log("Delete:" + d_res2.deletedCount);
+    const d_res = await metric_record.deleteMany({"$and": [{timestamp: {"$lt": now }}, { "cpuTemp": {$exists : true } }]} )
+    console.log("Delete:" + d_res.deletedCount);
 
-    metric_record.deleteMany({"$and": [{timestamp: {"$lt": now }}, { "cpuTemp": {$exists : true } }]} , (err, d_res) => {
-      if (err) throw err;
-      console.log("Delete:" + d_res.deleteCount);
-    })
-    //console.log("Delete:" + d_res2.deletedCount);
-
-//    metric_record.deleteMany({timestamp:{$lt : now}}, (err, d_res) => {
+//    metric_record.deleteMany({"$and": [{timestamp: {"$lt": now }}, { "cpuTemp": {$exists : true } }]} , (err, d_res) => {
 //      if (err) throw err;
-//      console.log("Delete:" + d_res.result.n);
-//    });
+//      console.log("Delete:" + d_res.deleteCount);
+//    })
 
-
-    //var yesterday = new Date(now_ms - DAY_MS);
-    //var yesterday = new Date(now - DAY_S);
     var yesterday = new Date(now - DAY_MS);
     var date_record = yesterday;
     console.log("Yesterday:" + yesterday)
@@ -78,12 +58,6 @@ async function run(){
     while (date_record <= now){
 
       cpu_temp = await getValue(date_record); 
-//      var record_hour = date_record.getHours();
-//      weighting = hourly_weighting[record_hour];
-
- //     const ceiling = (max_cpu / 10) * weighting;
-//      var cpu_usage = min_cpu + Math.floor(Math.random() * ceiling);
-//      cpu_usage = (max_cpu / 10) * random_num;
 
       const doc = {
         timestamp: date_record,
