@@ -4,11 +4,11 @@ const {MongoClient} = require('mongodb');
 const DAY_S = 24 * 60 * 60;
 const DAY_MS = DAY_S * 1000;
 const HOUR_MS = 60 * 60 * 1000;
-const INTERVAL_S = 30 * 60;
+const INTERVAL_S = 60 * 60;
 const INTERVAL_MS = INTERVAL_S * 1000;
 
-const max_temp = 73;
-const min_temp = 12;
+const max_temp = 78;
+const min_temp = 20;
 
 //nst hourly_weighting = [1, 2, 3, 4, 5, 6, 7, 8, 9 10, 11, 12, 13, 14 ,15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
 const hourly_weighting = [1, 2, 1, 1, 1, 1, 2, 2, 5,  7,  8,  9, 10, 10, 10,  9,  7,  5,  5,  5,  5,  3,  2,  1]
@@ -22,12 +22,15 @@ function sleep(ms) {
 
 async function getValue(a_timestamp){
   var record_hour = a_timestamp.getHours();
-  weighting = hourly_weighting[record_hour];
+  weighting = hourly_weighting[record_hour % 24];
 
-  const ceiling = (max_temp / 10) * weighting;
-  var cpu_temp = min_temp + Math.floor(Math.random() * ceiling);
 
-  console.log("TIME:" + a_timestamp + " HOUR:" + record_hour + " WEIGHTING:" + weighting + " CEILING:" + ceiling + " CPU Temp:" + cpu_temp);
+  cpu_temp = min_temp + Math.floor(Math.random() * ((max_temp - min_temp) / 10) * weighting)
+  //const ceiling = (max_temp / 10) * weighting;
+  //var cpu_temp = min_temp + Math.floor(Math.random() * ceiling);
+
+  //console.log("TIME:" + a_timestamp + " HOUR:" + record_hour + " WEIGHTING:" + weighting + " CEILING:" + ceiling + " CPU Temp:" + cpu_temp);
+  console.log("TIME:" + a_timestamp + " HOUR:" + record_hour + " WEIGHTING:" + weighting + " CPU Temp:" + cpu_temp);
   return cpu_temp;
 }
 
@@ -51,9 +54,9 @@ async function run(){
 //      console.log("Delete:" + d_res.deleteCount);
 //    })
 
-    var yesterday = new Date(now - DAY_MS);
-    var date_record = yesterday;
-    console.log("Yesterday:" + yesterday)
+    var last_week = new Date(now - (DAY_MS * 7));
+    var date_record = last_week;
+    console.log("Last Week:" + last_week)
 
     while (date_record <= now){
 
@@ -65,7 +68,7 @@ async function run(){
       }  
 
       const result = await metric_record.insertOne(doc);
-      console.log(`A document was inserted with the _id: ${result.insertedId}` + " CPU Temp:" + cpu_temp);
+      //console.log(`A document was inserted with the _id: ${result.insertedId}` + " CPU Temp:" + cpu_temp);
       //date_record = new Date(date_record.getTime() + INTERVAL_MS);
 	    
       date_record = new Date(date_record.getTime() + INTERVAL_MS);
