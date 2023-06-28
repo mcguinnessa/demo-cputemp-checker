@@ -7,8 +7,8 @@ const HOUR_MS = 60 * 60 * 1000;
 const INTERVAL_S = 60 * 60;
 const INTERVAL_MS = INTERVAL_S * 1000;
 
-const max_temp = 78;
-const min_temp = 20;
+const max_temp = 64;
+const min_temp = 28;
 
 //nst hourly_weighting = [1, 2, 3, 4, 5, 6, 7, 8, 9 10, 11, 12, 13, 14 ,15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
 const hourly_weighting = [1, 2, 1, 1, 1, 1, 2, 2, 5,  7,  8,  9, 10, 10, 10,  9,  7,  5,  5,  5,  5,  3,  2,  1]
@@ -28,6 +28,7 @@ async function getValue(a_timestamp){
   cpu_temp = min_temp + Math.floor(Math.random() * ((max_temp - min_temp) / 10) * weighting)
   //const ceiling = (max_temp / 10) * weighting;
   //var cpu_temp = min_temp + Math.floor(Math.random() * ceiling);
+  if (cpu_temp < min_temp) {cpu_temp = min_temp)
 
   //console.log("TIME:" + a_timestamp + " HOUR:" + record_hour + " WEIGHTING:" + weighting + " CEILING:" + ceiling + " CPU Temp:" + cpu_temp);
   console.log("TIME:" + a_timestamp + " HOUR:" + record_hour + " WEIGHTING:" + weighting + " CPU Temp:" + cpu_temp);
