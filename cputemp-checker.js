@@ -28,7 +28,7 @@ async function getValue(a_timestamp){
   cpu_temp = min_temp + Math.floor(Math.random() * ((max_temp - min_temp) / 10) * weighting)
   //const ceiling = (max_temp / 10) * weighting;
   //var cpu_temp = min_temp + Math.floor(Math.random() * ceiling);
-  if (cpu_temp < min_temp) {cpu_temp = min_temp)
+  if (cpu_temp < min_temp) {cpu_temp = min_temp}
 
   //console.log("TIME:" + a_timestamp + " HOUR:" + record_hour + " WEIGHTING:" + weighting + " CEILING:" + ceiling + " CPU Temp:" + cpu_temp);
   console.log("TIME:" + a_timestamp + " HOUR:" + record_hour + " WEIGHTING:" + weighting + " CPU Temp:" + cpu_temp);
