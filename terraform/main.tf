@@ -87,7 +87,8 @@ resource "aws_ecs_task_definition" "cputempchecker_task" {
   cpu                      = 256         # Specifying the CPU our container requires
 #  execution_role_arn       = "${aws_iam_role.ecsTaskExecutionRole2.arn}"
 #  execution_role_arn       = "arn:aws:iam::182028175464:role/ecsTaskExecutionRole2"
-  execution_role_arn       = "arn:aws:iam::182028175464:role/AlexECSTaskExecutionRole"
+#  execution_role_arn       = "arn:aws:iam::182028175464:role/AlexECSTaskExecutionRole"
+  execution_role_arn       = "arn:aws:iam::637423404396:role/AlexECSTaskExecutionRole"
 }
 
 #resource "aws_iam_role" "ecsTaskExecutionRole2" {
@@ -165,7 +166,8 @@ resource "aws_security_group" "cputempchecker_service_security_group" {
     protocol  = "-1"
     # Only allowing traffic in from the load balancer security group
     #security_groups = ["${aws_security_group.load_balancer_security_group.id}"]
-    security_groups = ["sg-039063a37c674e76b"]
+    #security_groups = ["sg-039063a37c674e76b"]
+    security_groups = ["sg-0171f41902e1d2b44"]
 
   }
 
